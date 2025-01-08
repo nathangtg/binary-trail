@@ -1,0 +1,35 @@
+# Byte-compiled / optimized / DLL files
+*.pyc
+*.pyo
+*.pyd
+**/__pycache__/
+
+# Virtual environment
+venv/
+env/
+.env
+
+# Logs and debug files
+*.log
+*.out
+*.err
+
+# Environment variables
+.envs
+
+# Flask-Migrate migrations
+migrations/
+
+# Cache and temporary files
+.cache/
+tmp/
+*.tmp
+*.pid
+
+# IDE and editor files
+.vscode/
+.idea/
+*.iml
+
+# Docker
+docker-compose.override.yml
