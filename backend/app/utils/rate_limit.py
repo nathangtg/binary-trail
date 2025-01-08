@@ -17,22 +17,16 @@ class RateLimit:
         self.window_seconds = window_seconds
 
     def _get_rate_limit_key(self, user_email: str) -> dict:
-        """Generate the DynamoDB key for rate limit records"""
         return {
             "pk": f"USER#{user_email}",
             "sk": f"RATELIMIT#API"
         }
 
     def _clean_old_requests(self, requests: list) -> list:
-        """Remove requests outside the current window"""
         cutoff_time = datetime.now(timezone.utc) - timedelta(seconds=self.window_seconds)
         return [req for req in requests if datetime.fromisoformat(req) > cutoff_time]
 
     def check_rate_limit(self, user_email: str) -> bool:
-        """
-        Check if the user has exceeded their rate limit
-        Returns True if request is allowed, False if limit exceeded
-        """
         try:
             # Get current rate limit record
             response = self.table.get_item(
@@ -116,23 +110,14 @@ class RateLimit:
 
 
 def rate_limit(max_requests: int = 5, window_seconds: int = 60):
-    """
-    Decorator to apply rate limiting to routes
-    
-    Usage:
-    @app.route('/api/endpoint')
-    @rate_limit(max_requests=5, window_seconds=60)
-    def my_route():
-        return 'Hello World'
-    """
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
-            if not request.user or 'email' not in request.user:
+            if not request.user or not hasattr(request.user, 'email'):
                 return jsonify({'error': 'Unauthorized'}), 401
                 
             rate_limiter = RateLimit(max_requests, window_seconds)
-            user_email = request.user['email']
+            user_email = request.user.email
             
             if not rate_limiter.check_rate_limit(user_email):
                 remaining = rate_limiter.get_remaining_requests(user_email)

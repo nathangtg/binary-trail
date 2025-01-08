@@ -7,6 +7,9 @@ from app.utils.auth import AuthUtil
 from app.database.db_config import Database
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
+from app.models.user import User
+
 
 load_dotenv()
 
@@ -80,7 +83,7 @@ class Phase1Controller:
         # Check rate limiting
         last_request = datetime.fromisoformat(challenge['last_request_time'])
         current_time = datetime.now(timezone.utc)
-        if (current_time - last_request).seconds < 12:  # 5 requests per minute max
+        if (current_time - last_request).seconds < 12:  
             raise ValueError("Rate limit exceeded. Wait a few seconds.")
             
         # Verify headers
@@ -116,6 +119,7 @@ class Phase1Controller:
             
         challenge = response['Item']
         correct_key = ''.join(challenge['key_fragments'])
+        print(correct_key)
         
         if assembled_key != correct_key:
             challenge['attempts'] += 1
@@ -146,8 +150,13 @@ class Phase1Controller:
         self.table.put_item(Item=challenge)
 
     def _generate_phase2_token(self, user_email: str) -> str:
-        return AuthUtil.generate_token({
-            'email': user_email,
-            'phase': 2,
-            'exp': datetime.now(timezone.utc) + datetime.timedelta(hours=1)
+        user = User.from_dict(self.table.get_item(Key={"pk": f"USER#{user_email}", "sk": "PROFILE"})["Item"])
+        
+        if not user:
+            raise ValueError("User not found")
+        
+        return ({           
+            "message": "Welcome to Phase 2. Here is your access token.",
+            "token": AuthUtil.generate_token(user, expires_in=86400),
+            "constraint": "You have 24 hours to complete Phase 2."
         })

@@ -21,7 +21,7 @@ def begin_challenge():
 @rate_limit(max_requests=5, window_seconds=60)
 def challenge_step(challenge_id):
     try:
-        user_email = request.user['email']
+        user_email = request.user.email
         result = controller.verify_request_headers(
             user_email,
             challenge_id,
@@ -37,7 +37,7 @@ def challenge_step(challenge_id):
 @require_auth
 def complete_challenge(challenge_id):
     try:
-        user_email = request.user['email']
+        user_email = request.user.email
         data = request.get_json()
         
         if not data or 'assembled_key' not in data:
@@ -52,4 +52,6 @@ def complete_challenge(challenge_id):
     except ValueError as e:
         return jsonify({'error': str(e)}), 400
     except Exception as e:
+        import traceback
+        print(traceback.format_exc()) 
         return jsonify({'error': 'Internal server error'}), 500
