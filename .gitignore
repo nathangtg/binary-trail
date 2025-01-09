@@ -33,3 +33,9 @@ tmp/
 
 # Docker
 docker-compose.override.yml
+
+# Terraform
+terraform/terraform.tfvars
+
+# Build files
+build/

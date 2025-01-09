@@ -1,5 +1,6 @@
 provider "aws" {
   region = "ap-southeast-1"
+  profile = "binary_trail"
 }
 
 # Additional resources for API Gateway
@@ -41,12 +42,17 @@ resource "aws_lambda_function" "flask_app" {
   function_name = "flask_app_lambda"
   runtime       = "python3.8"
   role          = aws_iam_role.lambda_exec.arn
-  handler       = "lambda_function.lambda_handler"  
-  filename      = "lambda_function.zip" 
+  handler       = "lambda_function.lambda_handler"
+  filename      = "lambda_function.zip"
 
   environment {
     variables = {
-      VAR_NAME = "value"
+      AWS_ACCESS_KEY_ID     = var.aws_access_key_id
+      AWS_SECRET_ACCESS_KEY = var.aws_secret_access_key
+      AWS_REGION            = var.aws_region
+      DYNAMODB_TABLE_NAME   = var.dynamodb_table_name
+      DYNAMODB_ENDPOINT     = var.dynamodb_endpoint
+      JWT_SECRET            = var.jwt_secret
     }
   }
 }
