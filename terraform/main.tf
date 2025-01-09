@@ -1,6 +1,6 @@
 provider "aws" {
   region = "ap-southeast-1"
-  profile = "binary_trail"
+  profile = "Binary Trails"
 }
 
 # Additional resources for API Gateway
