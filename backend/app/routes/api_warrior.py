@@ -22,7 +22,7 @@ def begin_challenge():
 def challenge_step(challenge_id):
     try:
         user_email = request.user.email
-        result = controller.verify_request_headers(
+        result = controller.verify_request_header(
             user_email,
             challenge_id,
             request.headers
