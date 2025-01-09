@@ -33,3 +33,19 @@ tmp/
 
 # Docker
 docker-compose.override.yml
+
+# Terraform
+*.tfstate
+*.tfstate.*
+*.tfvars
+.terraform/
+.terraform.tfstate.lock.info
+.terraform.lock.hcl
+
+# Build files
+build/
+
+# Lambda
+lambda/
+lambda.zip
+lambda_function.zip
