@@ -15,12 +15,6 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 class Phase2Controller:
-    """
-    Controller for Phase 2 of the Invincible Maze game.
-    This phase challenges players with various encryption puzzles they must solve
-    to progress through the maze.
-    """
-
     ENCRYPTION_KEYS = {
         'caesar': 3,  # Shift by 3 positions
         'xor': 42,    # XOR with key 42
@@ -44,17 +38,6 @@ class Phase2Controller:
         }
         
     def initialize_maze(self, user_email: str) -> Dict:
-        """
-        Create a new maze instance with encoded messages.
-        
-        Returns:
-        Dict containing:
-            - maze_id: Unique identifier for this maze instance
-            - first_message: The first encoded message to solve
-            - encoding_type: Type of encoding used for the first message
-            - hint: A helpful hint about how to decode the message
-            - total_stages: Total number of stages in the maze
-        """
         maze_id = str(uuid.uuid4())
         coordinates = self._generate_maze_path()
         encoded_messages = self._create_encoded_messages(coordinates)
@@ -139,14 +122,12 @@ class Phase2Controller:
         }
 
     def _verify_coordinate(self, maze: Dict, position: int, decoded_message: str) -> bool:
-        """Verify if the decoded message matches the expected coordinate."""
         x = int(maze['coordinates'][position]['x'])
         y = int(maze['coordinates'][position]['y'])
         expected = f"Navigate to ({x}, {y})"
         return decoded_message.strip() == expected
 
     def _generate_maze_path(self) -> List[Dict]:
-        """Generate a sequence of coordinates forming the maze path."""
         coordinates = []
         x, y = 0, 0
         for _ in range(4):  # 4 stages in total
@@ -156,7 +137,6 @@ class Phase2Controller:
         return coordinates
 
     def _create_encoded_messages(self, coordinates: List[Dict]) -> List[str]:
-        """Create encoded messages for each coordinate using different encryption methods."""
         messages = []
         for i, coord in enumerate(coordinates):
             message = f"Navigate to ({coord['x']}, {coord['y']})"
@@ -165,11 +145,9 @@ class Phase2Controller:
         return messages
 
     def _encode_base64(self, message: str) -> str:
-        """Encode message using Base64 encoding."""
         return base64.b64encode(message.encode()).decode()
 
     def _encode_caesar(self, message: str) -> str:
-        """Encode message using Caesar cipher with shift of 3, including numbers."""
         shift = self.ENCRYPTION_KEYS['caesar']
         result = ""
         for char in message:
@@ -189,25 +167,25 @@ class Phase2Controller:
         return result
 
     def _encode_xor(self, message: str) -> str:
-        """Encode message using XOR with key 42."""
+        # XOR with key 42
         key = self.ENCRYPTION_KEYS['xor']
         return ''.join([chr(ord(c) ^ key) for c in message])
 
     def _encode_custom(self, message: str) -> str:
-        """Encode message by reversing it and then applying Base64 encoding."""
+        # Reverse the message and encode in Base64
         return base64.b64encode(message[::-1].encode()).decode()
 
     def _get_next_encoding_type(self, position: int) -> str:
-        """Get the encryption type for the next message."""
+        # Cycle through the encoding types
         types = ['base64', 'caesar', 'xor', 'custom']
         return types[int(position) % len(types)]
 
     def _generate_token(self) -> str:
-        """Generate a reward token."""
+        # Generate a random 8-character token
         return str(uuid.uuid4())[:8]
 
     def _get_maze(self, user_email: str, maze_id: str) -> Dict:
-        """Retrieve maze data from database."""
+        # Retrieve maze from database
         response = self.table.get_item(
             Key={
                 'pk': f"USER#{user_email}",
@@ -224,16 +202,6 @@ class Phase2Controller:
         self.table.put_item(Item=maze)
         
     def get_progress(self, user_email: str, maze_id: str) -> Dict:
-        """
-        Get current progress information for a maze.
-        
-        Returns:
-        Dict containing:
-            - current_stage: Current stage number
-            - total_stages: Total number of stages
-            - attempts: Number of attempts made
-            - status: Current maze status
-        """
         maze = self._get_maze(user_email, maze_id)
         return {
             'current_stage': maze['current_position'] + 1,
