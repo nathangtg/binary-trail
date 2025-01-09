@@ -43,7 +43,8 @@ resource "aws_lambda_function" "flask_app" {
   runtime       = "python3.8"
   role          = aws_iam_role.lambda_exec.arn
   handler       = "lambda_function.lambda_handler"
-  filename      = "lambda_function.zip"
+  filename      = "../backend/lambda_function.zip"
+  source_code_hash = filebase64sha256("../backend/lambda_function.zip")
 
   environment {
     variables = {
@@ -55,6 +56,12 @@ resource "aws_lambda_function" "flask_app" {
       JWT_SECRET            = var.jwt_secret
     }
   }
+}
+
+resource "aws_iam_policy_attachment" "lambda_logs" {
+  name       = "lambda_logs"
+  roles      = [aws_iam_role.lambda_exec.name]
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
 # API Gateway

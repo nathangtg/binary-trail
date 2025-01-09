@@ -39,3 +39,8 @@ terraform/terraform.tfvars
 
 # Build files
 build/
+
+# Lambda
+lambda/
+lambda.zip
+lambda_function.zip
