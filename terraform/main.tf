@@ -48,9 +48,6 @@ resource "aws_lambda_function" "flask_app" {
 
   environment {
     variables = {
-      AWS_ACCESS_KEY_ID     = var.aws_access_key_id
-      AWS_SECRET_ACCESS_KEY = var.aws_secret_access_key
-      AWS_REGION            = var.aws_region
       DYNAMODB_TABLE_NAME   = var.dynamodb_table_name
       DYNAMODB_ENDPOINT     = var.dynamodb_endpoint
       JWT_SECRET            = var.jwt_secret
