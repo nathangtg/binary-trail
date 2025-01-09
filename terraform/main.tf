@@ -39,7 +39,7 @@ resource "aws_iam_role" "lambda_exec" {
 
 # Lambda Function (Flask app)
 resource "aws_lambda_function" "flask_app" {
-  function_name = "flask_app_lambda"
+  function_name = "binary_trail_api"
   runtime       = "python3.8"
   role          = aws_iam_role.lambda_exec.arn
   handler       = "lambda_function.lambda_handler"
