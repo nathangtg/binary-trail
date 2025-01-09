@@ -12,6 +12,7 @@ PyJWT==2.10.1
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 s3transfer==0.10.4
+serverless-wsgi==3.0.5
 six==1.17.0
 urllib3==2.3.0
 Werkzeug==3.1.3
