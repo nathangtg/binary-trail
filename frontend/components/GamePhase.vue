@@ -16,11 +16,12 @@
       </section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
     import type { Phase } from '~/interfaces/phase';
   
     const phases: Phase[] = [
         { id: 1, title: 'API Warrior', description: 'Uncover the secrets of headers and master the art of API requests.' },
         { id: 2, title: 'Crypto Maze', description: 'Decrypt encoded messages to find clues and make API calls.' },
         { id: 3, title: 'The Algorithm Network', description: 'Write an algorithm, submit it via Gists, and pass the final test!' }
-    ]</script>
+    ]
+</script>

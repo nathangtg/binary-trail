@@ -19,7 +19,7 @@
       </section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import type { Challenge } from '~/interfaces/challenge';
 const difficultyColors = {
         'Beginner': 'bg-green-500/20 text-green-400',
