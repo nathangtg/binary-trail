@@ -31,14 +31,14 @@ const difficultyColors = {
         {
         id: 1,
         title: 'Decode the Headers',
-        description: 'Figure out which headers are needed for the request.',
+        description: 'Figure out which headers are needed for the request. And their values.',
         difficulty: 'Beginner',
         points: 50
         },
         {
         id: 2,
         title: 'Decrypt the Message',
-        description: 'Use the cipher provided to decode the message.',
+        description: 'Use the cipher provided to decode the message and uncover the Crpyto Maze.',
         difficulty: 'Intermediate',
         points: 100
         },
