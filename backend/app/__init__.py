@@ -4,6 +4,7 @@ from flask import Flask
 from .routes.auth_route import AuthRoute
 from .routes.api_warrior import bp as api_warrior_bp
 from .routes.crypto_maze import bp as crypto_maze_bp
+from .routes.challenge import ChallengeRoute as challenge_bp
 
 def create_app():
     app = Flask(__name__)
@@ -19,6 +20,8 @@ def create_app():
     app.register_blueprint(AuthRoute)
     app.register_blueprint(api_warrior_bp)
     app.register_blueprint(crypto_maze_bp)
+    app.register_blueprint(challenge_bp)
+    
 
     return app
 
